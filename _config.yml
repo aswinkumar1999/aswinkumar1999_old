@@ -13,8 +13,8 @@ urls:
       url: /blog
     - text: Contact Me
       url : /contact
-    - text: Styleguide
-      url: /styleguide
+    # - text: Styleguide
+    #   url: /styleguide
 
 # Edit these details
 
@@ -23,7 +23,7 @@ author: Aswinkumar
 author_bio: Hi, I'm Aswinkumar , Welcome to my Blog site :D
 author_email: "aswinkumar1999@gmail.com"
 author_location: India
-typewrite-text: Hello world !! Welcome to my personal website :D 
+typewrite-text: Hello world !! Welcome to my personal website :D
 
 # author_work_experiences:
 #             - company_name: Google
