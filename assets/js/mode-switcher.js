@@ -1,6 +1,5 @@
 let systemInitiatedDark = window.matchMedia("(prefers-color-scheme: dark)");
-let theme = sessionStorage.getItem('theme');
-
+let theme = "dark";
 function prefersColorTest(systemInitiatedDark) {
   if (systemInitiatedDark.matches) {
 	  document.documentElement.setAttribute('data-theme', 'dark');
@@ -16,7 +15,7 @@ systemInitiatedDark.addListener(prefersColorTest);
 
 
 function modeSwitcher() {
-	let theme = sessionStorage.getItem('theme');
+	let theme = "dark";
 	if (theme === "dark") {
 		document.documentElement.setAttribute('data-theme', 'light');
 		sessionStorage.setItem('theme', 'light');
