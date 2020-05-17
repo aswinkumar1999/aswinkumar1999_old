@@ -88,7 +88,7 @@ python setup.py install
 
 If everything completes successfully you should be able to run the examples
 
-```
+```bash
 python examples\body_interaction.py
 ```
 
@@ -98,7 +98,7 @@ Great , with all the above steps performed, let's go on build our first model.
 
 Now , Let's verify we are in the correct directory. 
 
-```
+```bash
 $ cd ~/.mujoco/mujoco200/  
 $ pwd 
 /Users/~user~/.mujoco/mujoco200
@@ -106,19 +106,19 @@ $ pwd
 
 Let us now create a new folder where we will save our models and python files. 
 
-```
+```bash
 $ mkdir my_files
 ```
 
 Create a new model file in this folder and add a few lines to it.
 
-```
+```bash
 $ touch my_files/hello_mujoco.xml
 ```
 
 Add the following lines to it and save it. 
 
-```
+```xml
 <mujoco>
    <worldbody>
       <light diffuse=".5 .5 .5" pos="0 0 3" dir="0 0 -1"/>    
@@ -135,11 +135,108 @@ Let us now simulate this and then go back to seeing them in detail line-by-line.
 
 To simulate this do the following : 
 
-```
+``` bash
 $ cd /bin # Change to directory containing the binaries 
 $ ./simnulate ../my_files/hello_mujoco.xml
 ```
 
 Voila !! Now you have an OpenGL window pop-up with the animation of the falling cube. 
 
+
+<p align="center">
+  <img width="460" height="300" src="https://github.com/aswinkumar1999/aswinkumar1999.github.io/blob/master/assets/img/posts/mujoco-part-0/hello_mujoco.gif">
+</p> 
+
+
 Now Let us see in brief about what the lines mean , for which we will extensively use the [documentation](http://www.mujoco.org/book/XMLreference.html) provided by MuJoCo 
+
+#### `<mujoco>` Tag 
+
+Every MJCF files starts with `<mujoco>` tag and ends with `</mujoco>` , Why should it start and end this way you may ask , given we are using mujoco , isn't all of it be MuJoCo code ? why does the compiler require us to specific it ?
+
+Because this helps us identify between URDF and MJCF files, Also we can use MuJoCo for [some parts for URDF file](http://www.mujoco.org/book/modeling.html#CURDF).
+
+
+#### `<worldbody>` Tag 
+
+The element worldbody is used for the top-level body, while the element body is used for all other bodies. We define the worldbody tag to describe our model. 
+
+[Reference](http://www.mujoco.org/book/XMLreference.html#body)
+
+
+#### `<light>`
+
+Here we describe a fix light source in the world body , you can also create light which moves with the body , when the `<light>` tag is nested inside the body
+
+- Diffuse ( r g b ) : Here we define how the reflection of light to all directions at a point, Other Paramteres Include : Ambient and Specular .... Check this out [What is the difference between Ambient, Diffuse, and Specular Light in OpenGL?](https://www.quora.com/What-is-the-difference-between-Ambient-Diffuse-and-Specular-Light-in-OpenGL-Figures-for-illustration-are-encouraged#)
+
+- pos ( x y z )  : Defines the X , Y , Z coordinate of the light source
+
+- dir ( x y z ) : Defines the direction of the light
+
+#### `<geom>`
+
+Here we describe of the geometry of the body , and in this specific case , we describe a plane with length and breath of 1 unity and a thickness of 0.1 , If you see the Documentation, you see `<geom>` nested under `<body>` , and in this case , the plane we described is a part of the world body. 
+
+- size ( x y z ) : x , y , z sizes of the body. 
+
+- rgba ( r g b a ) : Color of the geometry - Red , Blue , Green and Alpha Channel values from 0 to 1
+
+Bonus : Recording function & Converting to GIF 
+
+#### `<body>`
+
+Here we describe a child body under the parent of worldbody , here we use `pos` to define the position of the body frame.
+
+There are other parameters which are listed in the Documentation. 
+
+#### `<joint>`
+
+We use `<joint>` to describe to the motion degress of freedom between the defined body and it's parents , in this case the worldbody.
+
+- type : [free, ball, slide, hinge], "hinge" - Uses Hinge when type is not specified. 
+        - free joint allow 3 axis of translation and 3 axis of rotation.
+
+With this we can conclude the first blog post on MuJoCo. 
+
+### Bonus 
+
+I use the record function to record the videos such as the GIF above. 
+
+The record function is also part of the `bin` folder 
+
+```bash
+$ ./record ../my_files/hello_mujoco.xml 5 60 rgb.out
+$ ffmpeg -f rawvideo -pixel_format rgb24 -video_size 640x480 -framerate 60 -i rgb.out -vf "vflip" video.mp4
+```
+
+This would give the output as `video.mp4`
+
+I used this script for this blog to create GIFs easily 
+
+```bash
+#!/bin/sh
+
+palette="/tmp/palette.png"
+
+filters="fps=10,scale=480:-1:flags=lanczos"
+
+./record "$1" 5 60 rgb.out
+
+ffmpeg -f rawvideo -pixel_format rgb24 -video_size 640x480 -framerate 60 -i rgb.out -vf "vflip" video.mp4
+
+ffmpeg -v warning -i video.mp4 -vf "$filters,palettegen" -y "$palette"
+ffmpeg -v warning -i video.mp4 -i $palette -lavfi "$filters [x]; [x][1:v] paletteuse" -y "$2"
+
+rm rgb.out video.mp4
+```
+
+Save it as gif_script.sh and `chmod +x gif_script.sh`
+
+To run it : 
+
+```
+$ ./gif_script.sh ../my_files/hello_mujoco.xml ../my_files/hello_mujoco.gif 
+```
+
+Thank you for taking your time to go through this. All the files used in this are uploaded in this Github Folder , You can go through them and create issues incase i've made a mistake or leave your feedback there. 
