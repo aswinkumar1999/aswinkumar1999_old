@@ -8,7 +8,7 @@ category:
         - MuJoCo
         - MuJoCo-Py
         - OpenAI
-summary: MuJoCo for Noobs
+summary: Hello MuJoCo !!
 thumbnail: mujoco-part-0/thumb.png
 ---
 
