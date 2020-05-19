@@ -169,3 +169,68 @@ This has nothing to do with the model and this provides some cool OpenGL Feature
 <p align="center">
   <img width="960" height="540" src="https://github.com/aswinkumar1999/aswinkumar1999.github.io/raw/master/assets/img/posts/mujoco-part-1/opengl_reflshad.gif" />
 </p>
+
+# Hello mujoco-py
+
+Let us now , write the Hello world of mujoco-py , the installation instructions ( Using pip and Source build ) are present in the previous page and you can refer them for installation. 
+
+With that , let's write the first program 
+
+```bash 
+# Create a new file
+$ touch hello_mujoco_py.py
+
+# Edit the File 
+$ nano hello_mujoco_py.py
+```
+
+Inside the Python file , let us now write out code for the program.
+
+This is the code , The Code has explanations for what they. perform. 
+
+```python
+#Import required libraries
+import mujoco_py
+import os
+
+# Get the mujoco-py path and Load the XML file
+mj_path, _ = mujoco_py.utils.discover_mujoco()
+xml_path = os.path.join(mj_path, 'my_files', 'hello_mujoco.xml')
+model = mujoco_py.load_model_from_path(xml_path)
+
+# Setup the simulator and viewer
+sim = mujoco_py.MjSim(model)
+viewer = mujoco_py.MjViewer(sim)
+
+# Infinite Loop
+while True:
+    # Print (x,y,z) positions and Quaternions of the system.
+    print(sim.data.qpos)
+    # Simulate by one step and render it on Screen. 
+    sim.step()
+    viewer.render()
+
+```
+
+Now , if we run this , We will get a New window which will render the Simulation and the Terminal on which you execute the command will print the qpos values. 
+
+```bash
+$ python3 hello_mujoco_py.py
+```
+
+Output Window : 
+
+<p align="center">
+  <img width="960" height="540" src="https://github.com/aswinkumar1999/aswinkumar1999.github.io/raw/master/assets/img/posts/mujoco-part-1/mujoco_py.gif" />
+</p>
+
+
+## Bonus : 
+
+I mentioned about Quaternions in the Code, But again when i first came across it , I did not understand what they meant or how they work , But i found this video which described quaternions very beautifully. 
+
+[Quaternions and 3d rotation, explained interactively - 3Blue1Brown](https://www.youtube.com/watch?v=zjMuIxRvygQ)
+
+But if you want the output in Euler Angles or in other 3D axis frames. You can use the script here to do so. It is part of OpenAI Environment 
+
+[gym/rotations.py](https://github.com/openai/gym/blob/master/gym/envs/robotics/rotations.py)
