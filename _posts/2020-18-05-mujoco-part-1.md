@@ -1,6 +1,6 @@
 ---
 layout: post
-title: MuJoCo simulator
+title: Getting Started with MuJoCo - Part 2 
 author: Aswinkumar
 date: '2020-05-18 10:19:51 +0530'
 category:
@@ -8,7 +8,7 @@ category:
         - MuJoCo
         - MuJoCo-Py
         - OpenAI
-summary: MuJoCo for Noobs - Part 2
+summary: MuJoCo Simulator and Hello mujoco-py
 thumbnail: mujoco-part-1/pzr.gif
 ---
 
